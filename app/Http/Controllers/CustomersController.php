@@ -40,11 +40,11 @@ class CustomersController extends Controller
             'pgivenby' => 'required|max:400',
             'pgivendate' => 'required|date',
             'exportdate' => 'required|date',
-            'summ' => 'required|numeric',
-            'pre' => 'required|numeric',
-            'com' => 'required|numeric',
-            'liz' => 'required|numeric',
-            'fem' => 'required|numeric',
+            'summ' => 'required',
+            'pre' => 'required',
+            'com' => 'required',
+            'liz' => 'required',
+            'fem' => 'required',
         ]);
         $customer = Customer::create([
             'name' => $request->name,
@@ -60,13 +60,13 @@ class CustomersController extends Controller
         ]);
         Export::create([
             'customer_id' => $customer->id,
-            'summ' => $request->summ,
-            'pre' => $request->pre,
-            'com' => $request->com,
-            'liz' => $request->liz,
-            'fem' => $request->fem,
+            'summ' => floatval(str_replace(" ","",$request->summ)),
+            'pre' => floatval(str_replace(" ","",$request->pre)),
+            'com' => floatval(str_replace(" ","",$request->com)),
+            'liz' => floatval(str_replace(" ","",$request->liz)),
+            'fem' => floatval(str_replace(" ","",$request->fem)),
             'exportdate' => $request->exportdate,
-            'remains' => $request->summ,
+            'remains' => floatval(str_replace(" ","",$request->summ)),
             'paymentdate' => $request->exportdate,
         ]);
         return redirect('/');

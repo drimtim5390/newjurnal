@@ -3,6 +3,11 @@
     Мижоз қўшиш
 @endsection
 @section('content')
+    <style>
+        .input-numeral{
+            text-align: right;
+        }
+    </style>
     <div class="col">
         <form method="POST" action="{{'/'}}">
             {{csrf_field()}}
@@ -124,45 +129,45 @@
                             </div>
                             <div class="col">
                                 <label for="summ">Шартнома суммаси</label>
-                                <input class="form-control" type="number" id="sum" name="summ" onkeyup="calc()">
+                                <input class="form-control input-numeral summ" type="text" id="sum" name="summ" onkeyup="calc()">
                             </div>
                             <div class="col">
                                 <label for="pre">Олдиндан тўлов, %</label>
-                                <input class="form-control" type="number" id="pre" name="pre" value="30" onkeyup="calc()">
+                                <input class="form-control input-numeral pre" type="text" id="pre" value="30" onkeyup="calc()">
                             </div>
                             <div class="col">
                                 <label for="com">Комиссия, %</label>
-                                <input class="form-control" type="number" id="com" name="com" value="3" onkeyup="calc()">
+                                <input class="form-control input-numeral com" type="text" id="com" value="3" onkeyup="calc()">
                             </div>
                             <div class="col">
                                 <label for="liz">Лизинг, %</label>
-                                <input class="form-control" type="number" id="liz" name="liz" value="30" onkeyup="calc()">
+                                <input class="form-control input-numeral liz" type="text" id="liz" value="30" onkeyup="calc()">
                             </div>
                             <div class="col">
                                 <label for="fem">Myддати, ойда</label>
-                                <input class="form-control" type="number" id="fem" name="fem" value="12" onkeyup="calc()">
+                                <input class="form-control input-numeral fem" type="text" id="fem" value="12" onkeyup="calc()">
                             </div>                            
                         </div>
                         <div class="row">
                             <div class="col">
                                 <label>Умумий тўлов суммаси:</label>
-                                <p class="alert alert-info" id="suma">...</p>
+                                <input class="form-control input-numeral suma" id="suma">
                             </div>
                             <div class="col">
                                 <label>Олдиндан тўлов</label>
-                                <p class="alert alert-info" id="prea">...</p>
+                                <input class="form-control input-numeral prea" id="prea" name="pre">
                             </div>
                             <div class="col">
                                 <label>Комиссия</label>
-                                <p class="alert alert-info" id="coma">...</p>
+                                <input class="form-control input-numeral coma" id="coma" name="com">
                             </div>
                             <div class="col">
                                 <label>Лизинг</label>
-                                <p class="alert alert-info" id="liza">...</p>
+                                <input class="form-control input-numeral liza" id="liza" name="liz">
                             </div>
                             <div class="col">
                                 <label>Ойлик тўлов</label>
-                                <p class="alert alert-info" id="fema">...</p>
+                                <input class="form-control input-numeral fema" id="fema" name="fem">
                             </div>
                         </div>
                     </div> 
@@ -173,7 +178,58 @@
             </div>
         </form>
     </div>
+    <script src="js/cleave.js"></script>
     <script>
+        var csumm = new Cleave('.summ',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cpre = new Cleave('.pre',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var ccom = new Cleave('.com',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cliz = new Cleave('.liz',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cfem = new Cleave('.fem',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var csuma = new Cleave('.suma',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cprea = new Cleave('.prea',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var ccoma = new Cleave('.coma',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cliza = new Cleave('.liza',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cfema = new Cleave('.fema',{
+            numeral: true,
+            delimiter: " ",
+            numeralThousandsGroupStyle: 'thousand'
+        });
         Date.prototype.toDateInputValue = (function() {
             var local = new Date(this);
             local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
@@ -194,22 +250,22 @@
                 return ('.' ? num.replace('.', '.') : num).replace(new RegExp(re, 'g'), '$&' + (' ' || ','));
             };
 
-            var sum = document.getElementById("sum").value;
-            var pre = document.getElementById("pre").value;
-            var com = document.getElementById("com").value;
-            var liz = document.getElementById("liz").value;
-            var fem = document.getElementById("fem").value;
+            var sum = document.getElementById("sum").value.replace(/ /g,"");
+            var pre = document.getElementById("pre").value.replace(/ /g,"");
+            var com = document.getElementById("com").value.replace(/ /g,"");
+            var liz = document.getElementById("liz").value.replace(/ /g,"");
+            var fem = document.getElementById("fem").value.replace(/ /g,"");
 
             var prea = sum*pre/100;
             var coma = sum*com/100;
             var liza = (sum-prea)*(1+liz/100);
             var fema = liza/fem;
 
-            document.getElementById("suma").innerHTML = (liza+prea).beauty();
-            document.getElementById("prea").innerHTML = (prea+coma).beauty();
-            document.getElementById("coma").innerHTML = (coma).beauty();
-            document.getElementById("liza").innerHTML = (liza).beauty();
-            document.getElementById("fema").innerHTML = (fema).beauty();
+            document.getElementById("suma").value = (liza+prea).beauty();
+            document.getElementById("prea").value = (prea+coma).beauty();
+            document.getElementById("coma").value = (coma).beauty();
+            document.getElementById("liza").value = (liza).beauty();
+            document.getElementById("fema").value = (fema).beauty();
         }
     </script>
 @endsection

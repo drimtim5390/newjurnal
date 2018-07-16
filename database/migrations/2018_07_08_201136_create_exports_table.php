@@ -21,7 +21,7 @@ class CreateExportsTable extends Migration
             $table->double('com');
             $table->double('liz');
             $table->double('fem');
-            $table->integer('remains');
+            $table->double('remains');
             $table->date('exportdate');
             $table->date('paymentdate');
             $table->timestamps();

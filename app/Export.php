@@ -20,19 +20,19 @@ class Export extends Model
         return $this->hasMany(Payment::class);
     }
     public function getPreaAttribute(){
-        return $this->summ*$this->pre/100;
+        return $this->pre*100/$this->summ;
     }
     public function getComaAttribute(){
-        return $this->summ*$this->com/100;
+        return $this->com*100/$this->summ;
     }
     public function getLizaAttribute(){
-        return $this->summ*(1-$this->pre/100)*(1+$this->liz/100);
+        return ($this->liz/($this->summ-$this->pre)-1)*100;
     }
     public function getSumaAttribute(){
-        return $this->prea+$this->liza;
+        return $this->pre+$this->liz;
     }
     public function getFemaAttribute(){
-        return $this->liza/$this->fem;
+        return $this->liz/$this->fem;
     }
     public function getPayedAttribute(){
         $payed = 0;
@@ -52,15 +52,15 @@ class Export extends Model
         $now = Carbon::now();
         $diff = $end->diffInMonths($now)+1;
 
-        $shbp = min($diff*$this->fema+$this->prea, $this->suma);
+        $shbp = min($diff*$this->fem+$this->pre, $this->suma);
 
         return $this->payed-$shbp;
     }
     public function setPaymentdateAttribute($value){
         $date = Carbon::parse($this->exportdate);
-        if($this->payed-$this->prea>=0){
-            $liza = $this->payed-$this->prea;
-            $s = $liza/$this->fema;
+        if($this->payed-$this->pre>=0){
+            $liz = $this->payed-$this->pre;
+            $s = $liz/$this->fem;
             if($s%1==0){
                 $date->addMonths($s+1);
             }else{
