@@ -16,11 +16,11 @@ class CreateExportsTable extends Migration
         Schema::create('exports', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id');
-            $table->integer('summ');
-            $table->integer('pre');
-            $table->integer('com');
-            $table->integer('liz');
-            $table->integer('fem');
+            $table->double('summ');
+            $table->double('pre');
+            $table->double('com');
+            $table->double('liz');
+            $table->double('fem');
             $table->integer('remains');
             $table->date('exportdate');
             $table->date('paymentdate');
